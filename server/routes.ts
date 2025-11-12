@@ -4,13 +4,37 @@ import { storage } from "./storage";
 import { insertUserSchema, loginSchema, insertProductSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
 import Stripe from "stripe";
+import "dotenv/config";
 
-const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "";
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "sk_test_placeholder";
 const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: "2025-10-29.clover",
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup route - create default admin account
+  app.post("/api/setup", async (req, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      if (users.length > 0) {
+        return res.status(400).json({ message: "Admin user already exists" });
+      }
+
+      const hashedPassword = await bcrypt.hash("Admin@123", 10);
+      let user = await storage.createUser({
+        email: "admin@axoshard.com",
+        password: hashedPassword,
+        name: "AxoShard Admin",
+      });
+
+      user = await storage.makeAdmin(user.id) || user;
+      const { password, ...userWithoutPassword } = user;
+      res.json({ message: "Admin user created", user: userWithoutPassword });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
   // Auth routes
   app.post("/api/auth/signup", async (req, res) => {
     try {
@@ -22,10 +46,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const hashedPassword = await bcrypt.hash(data.password, 10);
-      const user = await storage.createUser({
+      let user = await storage.createUser({
         ...data,
         password: hashedPassword,
       });
+
+      // Make first user an admin
+      const allUsers = await storage.getAllUsers();
+      if (allUsers.length === 1) {
+        user = await storage.makeAdmin(user.id) || user;
+      }
 
       const { password, ...userWithoutPassword } = user;
       res.json(userWithoutPassword);
@@ -49,6 +79,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Admin setup route - make first user admin or by email
+  app.post("/api/auth/make-admin", async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const updated = await storage.makeAdmin(user.id);
+      const { password, ...userWithoutPassword } = updated || user;
       res.json(userWithoutPassword);
     } catch (error: any) {
       res.status(400).json({ message: error.message });

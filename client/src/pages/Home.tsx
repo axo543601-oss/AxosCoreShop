@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductDetailModal } from "@/components/ProductDetailModal";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
@@ -13,6 +14,8 @@ export default function Home() {
   const { toast } = useToast();
   const { cart, addToCart, updateQuantity, removeItem, cartItemCount } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -35,6 +38,29 @@ export default function Home() {
     toast({
       title: "Added to cart",
       description: `${product.name} has been added to your cart`,
+    });
+  };
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleAddFromModal = (product: Product, size: string) => {
+    const existing = cart.find((item) => item.product.id === product.id);
+    if (existing && existing.quantity >= product.stock) {
+      toast({
+        title: "Cannot add more",
+        description: "Maximum stock reached for this item",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    addToCart({ product, quantity: 1 });
+    toast({
+      title: "Added to cart",
+      description: `${product.name} (Size: ${size}) has been added to your cart`,
     });
   };
 
@@ -63,6 +89,16 @@ export default function Home() {
         items={cart}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
+      />
+
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedProduct(null);
+        }}
+        onAddToCart={handleAddFromModal}
       />
 
       <div className="relative bg-gradient-to-br from-primary/20 via-primary/10 to-background overflow-hidden">
@@ -121,11 +157,23 @@ export default function Home() {
                 key={product.id}
                 product={product}
                 onAddToCart={handleAddToCart}
+                onProductClick={handleProductClick}
               />
             ))}
           </div>
         )}
       </div>
+
+      <footer className="bg-background border-t border-border mt-16 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-muted-foreground">
+            © All rights reserved 2025 AxoShard
+          </p>
+          <p className="text-muted-foreground mt-1">
+            Made for all axolotl lovers
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

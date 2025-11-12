@@ -6,19 +6,24 @@ import type { Product } from "@shared/schema";
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: Product) => void;
+  onAddToCart: (product: Product, size?: string) => void;
+  onProductClick: (product: Product) => void;
 }
 
-export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+export function ProductCard({ product, onAddToCart, onProductClick }: ProductCardProps) {
   const isOutOfStock = product.stock === 0;
 
   return (
-    <Card className="overflow-hidden hover-elevate" data-testid={`card-product-${product.id}`}>
+    <Card 
+      className="overflow-hidden hover-elevate cursor-pointer transition-all" 
+      data-testid={`card-product-${product.id}`}
+      onClick={() => onProductClick(product)}
+    >
       <div className="aspect-square overflow-hidden bg-muted">
         <img
           src={product.imageUrl}
           alt={product.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover hover:scale-105 transition-transform"
           data-testid={`img-product-${product.id}`}
         />
       </div>
@@ -48,8 +53,11 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button
-          className="w-full"
-          onClick={() => onAddToCart(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart(product);
+          }}
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white"
           disabled={isOutOfStock}
           data-testid={`button-add-to-cart-${product.id}`}
         >

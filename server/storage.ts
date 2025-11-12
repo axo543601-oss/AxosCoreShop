@@ -1,11 +1,25 @@
 import type { User, InsertUser, Product, InsertProduct, Order, InsertOrder, OrderItem, InsertOrderItem } from "@shared/schema";
 import { randomUUID } from "crypto";
+import fs from "fs";
+import path from "path";
+import bcrypt from "bcrypt";
+
+const DATA_FILE = path.resolve(import.meta.dirname, "../data.json");
+
+interface StorageData {
+  users: Record<string, User>;
+  products: Record<string, Product>;
+  orders: Record<string, Order>;
+  orderItems: Record<string, OrderItem>;
+}
 
 export interface IStorage {
   // User methods
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getAllUsers(): Promise<User[]>;
   createUser(user: InsertUser): Promise<User>;
+  makeAdmin(userId: string): Promise<User | undefined>;
   
   // Product methods
   getProducts(): Promise<Product[]>;
@@ -21,17 +35,38 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-  private products: Map<string, Product>;
-  private orders: Map<string, Order>;
-  private orderItems: Map<string, OrderItem>;
+  private data: StorageData;
 
   constructor() {
-    this.users = new Map();
-    this.products = new Map();
-    this.orders = new Map();
-    this.orderItems = new Map();
-    this.seedProducts();
+    this.data = this.loadData();
+    if (Object.keys(this.data.products).length === 0) {
+      this.seedProducts();
+    }
+  }
+
+  private loadData(): StorageData {
+    try {
+      if (fs.existsSync(DATA_FILE)) {
+        const content = fs.readFileSync(DATA_FILE, 'utf-8');
+        return JSON.parse(content);
+      }
+    } catch (error) {
+      console.error('Error loading data file:', error);
+    }
+    return {
+      users: {},
+      products: {},
+      orders: {},
+      orderItems: {},
+    };
+  }
+
+  private saveData(): void {
+    try {
+      fs.writeFileSync(DATA_FILE, JSON.stringify(this.data, null, 2), 'utf-8');
+    } catch (error) {
+      console.error('Error saving data file:', error);
+    }
   }
 
   private seedProducts() {
@@ -97,17 +132,26 @@ export class MemStorage implements IStorage {
     productData.forEach((data) => {
       const id = randomUUID();
       const product: Product = { ...data, id };
-      this.products.set(id, product);
+      this.data.products[id] = product;
     });
+    this.saveData();
   }
 
   // User methods
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    return this.data.users[id];
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find((user) => user.email === email);
+    return Object.values(this.data.users).find((user) => user.email === email);
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return Object.values(this.data.users);
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return Object.values(this.data.users);
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
@@ -115,47 +159,67 @@ export class MemStorage implements IStorage {
     const user: User = {
       ...insertUser,
       id,
+      isAdmin: false,
       createdAt: new Date().toISOString(),
     };
-    this.users.set(id, user);
+    this.data.users[id] = user;
+    this.saveData();
     return user;
+  }
+
+  async makeAdmin(userId: string): Promise<User | undefined> {
+    const user = this.data.users[userId];
+    if (!user) return undefined;
+    
+    const updated = { ...user, isAdmin: true };
+    this.data.users[userId] = updated;
+    this.saveData();
+    return updated;
   }
 
   // Product methods
   async getProducts(): Promise<Product[]> {
-    return Array.from(this.products.values());
+    return Object.values(this.data.products);
   }
 
   async getProduct(id: string): Promise<Product | undefined> {
-    return this.products.get(id);
+    return this.data.products[id];
   }
 
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const id = randomUUID();
     const product: Product = { ...insertProduct, id };
-    this.products.set(id, product);
+    this.data.products[id] = product;
+    this.saveData();
     return product;
   }
 
   async updateProduct(id: string, insertProduct: InsertProduct): Promise<Product | undefined> {
-    const existing = this.products.get(id);
+    const existing = this.data.products[id];
     if (!existing) return undefined;
     
     const product: Product = { ...insertProduct, id };
-    this.products.set(id, product);
+    this.data.products[id] = product;
+    this.saveData();
     return product;
   }
 
   async deleteProduct(id: string): Promise<boolean> {
-    return this.products.delete(id);
+    if (id in this.data.products) {
+      delete this.data.products[id];
+      this.saveData();
+      return true;
+    }
+    return false;
   }
 
   async toggleProductActive(id: string, isActive: boolean): Promise<Product | undefined> {
-    const product = this.products.get(id);
+    const product = this.data.products[id];
     if (!product) return undefined;
     
     const updated = { ...product, isActive };
-    this.products.set(id, updated);
+    this.data.products[id] = updated;
+    this.saveData();
     return updated;
   }
 
@@ -167,14 +231,16 @@ export class MemStorage implements IStorage {
       id,
       createdAt: new Date().toISOString(),
     };
-    this.orders.set(id, order);
+    this.data.orders[id] = order;
+    this.saveData();
     return order;
   }
 
   async createOrderItem(insertOrderItem: InsertOrderItem): Promise<OrderItem> {
     const id = randomUUID();
     const orderItem: OrderItem = { ...insertOrderItem, id };
-    this.orderItems.set(id, orderItem);
+    this.data.orderItems[id] = orderItem;
+    this.saveData();
     return orderItem;
   }
 }

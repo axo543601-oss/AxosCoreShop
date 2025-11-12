@@ -38,11 +38,18 @@ export function Header({ cartItemCount, onCartClick }: HeaderProps) {
             {user ? (
               <>
                 {isAdmin && (
-                  <Link href="/admin">
-                    <Button variant="ghost" size="sm" data-testid="link-admin">
-                      Admin
-                    </Button>
-                  </Link>
+                  <>
+                    <Link href="/admin">
+                      <Button 
+                        variant="default" 
+                        size="sm" 
+                        className="bg-purple-600 hover:bg-purple-700"
+                        data-testid="link-admin"
+                      >
+                        Add Merch
+                      </Button>
+                    </Link>
+                  </>
                 )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

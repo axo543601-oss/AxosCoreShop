@@ -13,8 +13,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const ADMIN_EMAIL = "d91726733@gmail.com";
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("axo-user");
   };
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const isAdmin = user?.isAdmin ?? false;
 
   return (
     <AuthContext.Provider
