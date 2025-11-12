@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import type { User } from "@shared/schema";
+import { apiRequest } from "./queryClient";
 
 interface AuthContextType {
   user: User | null;
@@ -27,27 +28,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const mockUser: User = {
-      id: "1",
-      email,
-      name: email.split("@")[0],
-      password: "",
-      createdAt: new Date().toISOString(),
-    };
-    setUser(mockUser);
-    localStorage.setItem("axo-user", JSON.stringify(mockUser));
+    const userData = await apiRequest("POST", "/api/auth/login", { email, password });
+    setUser(userData);
+    localStorage.setItem("axo-user", JSON.stringify(userData));
   };
 
   const signup = async (email: string, password: string, name: string) => {
-    const mockUser: User = {
-      id: "1",
-      email,
-      name,
-      password: "",
-      createdAt: new Date().toISOString(),
-    };
-    setUser(mockUser);
-    localStorage.setItem("axo-user", JSON.stringify(mockUser));
+    const userData = await apiRequest("POST", "/api/auth/signup", { email, password, name });
+    setUser(userData);
+    localStorage.setItem("axo-user", JSON.stringify(userData));
   };
 
   const logout = () => {
