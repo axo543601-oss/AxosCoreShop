@@ -7,6 +7,14 @@
       "name": "AxoShard Admin",
       "isAdmin": true,
       "createdAt": "2025-11-12T22:00:00.000Z"
+    },
+    "2a37e6e1-327b-450c-a9bc-71cde6f8a340": {
+      "email": "aese@gmail.com",
+      "password": "$2b$10$wSj3SB5eWwnUERHbrclzWOapiEZtstpH.0O0IDmXzNBZDuZRrwNZ6",
+      "name": "eseses",
+      "id": "2a37e6e1-327b-450c-a9bc-71cde6f8a340",
+      "isAdmin": false,
+      "createdAt": "2025-11-13T08:08:51.719Z"
     }
   },
   "products": {

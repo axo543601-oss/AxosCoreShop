@@ -50,6 +50,8 @@ export const products = pgTable("products", {
 
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
+}).extend({
+  imageUrl: z.string().optional().default(""),
 });
 
 export type InsertProduct = z.infer<typeof insertProductSchema>;

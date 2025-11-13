@@ -174,7 +174,7 @@ export function ProductEditor({
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Image URL</FormLabel>
+                  <FormLabel>Image URL <span className="text-muted-foreground text-xs">(Optional)</span></FormLabel>
                   <FormControl>
                     <Input
                       {...field}

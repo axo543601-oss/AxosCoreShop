@@ -20,12 +20,18 @@ export function ProductCard({ product, onAddToCart, onProductClick }: ProductCar
       onClick={() => onProductClick(product)}
     >
       <div className="aspect-square overflow-hidden bg-muted">
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          className="w-full h-full object-cover hover:scale-105 transition-transform"
-          data-testid={`img-product-${product.id}`}
-        />
+        {product.imageUrl ? (
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            className="w-full h-full object-cover hover:scale-105 transition-transform"
+            data-testid={`img-product-${product.id}`}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+            <span>No image available</span>
+          </div>
+        )}
       </div>
       <CardContent className="p-4 space-y-2">
         <div>

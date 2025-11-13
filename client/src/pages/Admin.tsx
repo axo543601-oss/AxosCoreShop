@@ -242,11 +242,17 @@ export default function Admin() {
                       {products.map((product) => (
                         <TableRow key={product.id} data-testid={`row-product-${product.id}`}>
                           <TableCell>
-                            <img
-                              src={product.imageUrl}
-                              alt={product.name}
-                              className="h-12 w-12 object-cover rounded-md"
-                            />
+                            {product.imageUrl ? (
+                              <img
+                                src={product.imageUrl}
+                                alt={product.name}
+                                className="h-12 w-12 object-cover rounded-md"
+                              />
+                            ) : (
+                              <div className="h-12 w-12 bg-muted rounded-md flex items-center justify-center text-xs text-muted-foreground">
+                                No image
+                              </div>
+                            )}
                           </TableCell>
                           <TableCell className="font-medium">
                             {product.name}
