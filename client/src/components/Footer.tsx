@@ -28,23 +28,23 @@ export function Footer() {
             <h4 className="text-sm font-semibold text-foreground mb-4">Quick Links</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Shop
+                <Link href="/shop">
+                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">Shop</button>
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  About
+                <Link href="/about">
+                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</button>
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Contact
+                <Link href="/contact">
+                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</button>
                 </Link>
               </li>
               <li>
-                <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Privacy Policy
+                <Link href="/privacy-policy">
+                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</button>
                 </Link>
               </li>
             </ul>
