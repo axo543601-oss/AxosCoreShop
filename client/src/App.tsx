@@ -10,6 +10,10 @@ import { ThemeDecorations } from "@/components/ThemeDecorations";
 import type { ThemeType } from "@/components/ThemeManager";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
+import Shop from "@/pages/Shop";
+import About from "@/pages/About";
+import Contact from "@/pages/Contact";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import Checkout from "@/pages/Checkout";
@@ -20,6 +24,10 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/shop" component={Shop} />
+      <Route path="/about" component={About} />
+      <Route path="/contact" component={Contact} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/checkout" component={Checkout} />

@@ -7,9 +7,14 @@ import Stripe from "stripe";
 import "dotenv/config";
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "sk_test_placeholder";
-const stripe = new Stripe(STRIPE_SECRET_KEY, {
-  apiVersion: "2025-10-29.clover",
-});
+let stripe: Stripe | null = null;
+
+// Initialize Stripe only if we have a valid key
+if (STRIPE_SECRET_KEY && STRIPE_SECRET_KEY !== "sk_test_placeholder") {
+  stripe = new Stripe(STRIPE_SECRET_KEY, {
+    apiVersion: "2025-10-29.clover",
+  });
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup route - create default admin account
@@ -176,6 +181,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/create-payment-intent", async (req, res) => {
     try {
       const { items } = req.body;
+
+      if (!stripe) {
+        // Mock payment intent for development without valid Stripe key
+        const mockClientSecret = "pi_test_" + Math.random().toString(36).substr(2, 24) + "_secret_" + Math.random().toString(36).substr(2, 24);
+        
+        let totalAmount = 0;
+        for (const item of items) {
+          const product = await storage.getProduct(item.productId);
+          if (!product) {
+            return res.status(404).json({ message: `Product ${item.productId} not found` });
+          }
+          if (item.quantity > product.stock) {
+            return res.status(400).json({ message: `Insufficient stock for ${product.name}` });
+          }
+          totalAmount += parseFloat(product.price) * item.quantity;
+        }
+
+        return res.json({
+          clientSecret: mockClientSecret,
+          amount: totalAmount,
+        });
+      }
 
       let totalAmount = 0;
       for (const item of items) {

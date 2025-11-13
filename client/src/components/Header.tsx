@@ -14,11 +14,11 @@ import { useAuth } from "@/lib/authContext";
 import heroImage from "@assets/hero-purple-axolotl-mascot_1762939234262.png";
 
 interface HeaderProps {
-  cartItemCount: number;
-  onCartClick: () => void;
+  cartItemCount?: number;
+  onCartClick?: () => void;
 }
 
-export function Header({ cartItemCount, onCartClick }: HeaderProps) {
+export function Header({ cartItemCount = 0, onCartClick }: HeaderProps) {
   const { user, logout, isAdmin } = useAuth();
 
   return (
@@ -94,7 +94,7 @@ export function Header({ cartItemCount, onCartClick }: HeaderProps) {
               data-testid="button-cart"
             >
               <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
+              {cartItemCount && cartItemCount > 0 && (
                 <Badge
                   variant="default"
                   className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1 text-xs"
