@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/lib/cartContext";
 import { AuthProvider } from "@/lib/authContext";
 import { ThemeDecorations } from "@/components/ThemeDecorations";
+import { FloatingThemeWidget } from "@/components/FloatingThemeWidget";
 import type { ThemeType } from "@/components/ThemeManager";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
@@ -58,6 +59,7 @@ function AppContent() {
   return (
     <>
       <Router />
+      <FloatingThemeWidget />
       <ThemeDecorations theme={theme} enabled={decorationsEnabled} />
     </>
   );
