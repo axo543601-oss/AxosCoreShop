@@ -13,7 +13,7 @@ import Home from "@/pages/Home";
 import Shop from "@/pages/Shop";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import Checkout from "@/pages/Checkout";
@@ -27,7 +27,7 @@ function Router() {
       <Route path="/shop" component={Shop} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
-      <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/checkout" component={Checkout} />

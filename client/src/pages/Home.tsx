@@ -109,7 +109,7 @@ export default function Home() {
         onAddToCart={handleAddFromModal}
       />
 
-      <div className="relative bg-gradient-to-br from-primary/20 via-primary/10 to-background overflow-hidden">
+      <div id="about" className="relative bg-gradient-to-br from-primary/20 via-primary/10 to-background overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -135,7 +135,7 @@ export default function Home() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
+        <div id="shop" className="mb-8">
           <h2 className="text-3xl font-bold text-foreground">Shop All Products</h2>
           <p className="text-muted-foreground mt-2">
             Find the perfect axolotl merch for you
@@ -190,7 +190,7 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="bg-background border-t border-border mt-16 py-12">
+      <footer id="contact" className="bg-background border-t border-border mt-16 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {/* Brand Info */}
