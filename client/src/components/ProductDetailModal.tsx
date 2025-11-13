@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -61,6 +61,12 @@ export function ProductDetailModal({
   const sizes = product ? getSizesForProduct(product.name) : DEFAULT_SIZES;
   const defaultSize = sizes.length > 0 ? sizes[Math.floor(sizes.length / 2)] : "";
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
+
+  // Reset size when product changes
+  useEffect(() => {
+    const newDefaultSize = sizes.length > 0 ? sizes[Math.floor(sizes.length / 2)] : "";
+    setSelectedSize(newDefaultSize);
+  }, [product?.id, sizes.length]);
 
   if (!product) return null;
 
