@@ -195,6 +195,63 @@
  * Even without handling focused or not, this is six possible combinations that
  * need to be distinguished from eachother visually.
  */
+/* Theme Decorations */
+body.theme-decorated::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Christmas Snowflakes */
+body.theme-decorated {
+  --snowflake-count: 20;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-100vh) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(100px);
+    opacity: 0;
+  }
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Decorative elements */
+.theme-decorated .snowflake {
+  position: fixed;
+  top: -10px;
+  font-size: 1.5em;
+  opacity: 0.8;
+  animation: snowfall 10s linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.theme-decorated .decoration-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.theme-decorated .decoration-spin {
+  animation: spin-slow 20s linear infinite;
+}
+
 @layer utilities {
 
   /* Hide ugly search cancel button in Chrome until we can style it properly */

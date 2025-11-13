@@ -4,9 +4,11 @@ import { useLocation } from "wouter";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { ProductEditor } from "@/components/ProductEditor";
+import { ThemeManager } from "@/components/ThemeManager";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -25,7 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, ShieldAlert } from "lucide-react";
+import { Plus, Pencil, Trash2, ShieldAlert, Palette } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/authContext";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -199,104 +201,123 @@ export default function Admin() {
           </header>
 
           <main className="flex-1 overflow-y-auto p-6">
-            <div className="max-w-7xl mx-auto space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold text-foreground">Products</h2>
-                  <p className="text-sm text-muted-foreground">
-                    Manage your store products
-                  </p>
-                </div>
-                <Button
-                  onClick={() => {
-                    setEditingProduct(null);
-                    setIsEditorOpen(true);
-                  }}
-                  data-testid="button-add-product"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Product
-                </Button>
-              </div>
+            <div className="max-w-7xl mx-auto">
+              <Tabs defaultValue="products" className="w-full">
+                <TabsList className="mb-6">
+                  <TabsTrigger value="products" className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Products
+                  </TabsTrigger>
+                  <TabsTrigger value="themes" className="gap-2">
+                    <Palette className="h-4 w-4" />
+                    Themes
+                  </TabsTrigger>
+                </TabsList>
 
-              <Card>
-                {isLoading ? (
-                  <div className="p-6 space-y-4">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Skeleton key={i} className="h-16 w-full" />
-                    ))}
+                <TabsContent value="products" className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xl font-semibold text-foreground">Products</h2>
+                      <p className="text-sm text-muted-foreground">
+                        Manage your store products
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        setEditingProduct(null);
+                        setIsEditorOpen(true);
+                      }}
+                      data-testid="button-add-product"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Product
+                    </Button>
                   </div>
-                ) : products && products.length > 0 ? (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Image</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Stock</TableHead>
-                        <TableHead>Active</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {products.map((product) => (
-                        <TableRow key={product.id} data-testid={`row-product-${product.id}`}>
-                          <TableCell>
-                            {product.imageUrl ? (
-                              <img
-                                src={product.imageUrl}
-                                alt={product.name}
-                                className="h-12 w-12 object-cover rounded-md"
-                              />
-                            ) : (
-                              <div className="h-12 w-12 bg-muted rounded-md flex items-center justify-center text-xs text-muted-foreground">
-                                No image
-                              </div>
-                            )}
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            {product.name}
-                          </TableCell>
-                          <TableCell>${parseFloat(product.price).toFixed(2)}</TableCell>
-                          <TableCell>{product.stock}</TableCell>
-                          <TableCell>
-                            <Switch
-                              checked={product.isActive}
-                              onCheckedChange={() => handleToggleActive(product)}
-                              data-testid={`switch-active-${product.id}`}
-                            />
-                          </TableCell>
-                          <TableCell className="text-right space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleEdit(product)}
-                              data-testid={`button-edit-${product.id}`}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="text-destructive hover:text-destructive"
-                              onClick={() => setDeletingProductId(product.id)}
-                              data-testid={`button-delete-${product.id}`}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                ) : (
-                  <div className="p-12 text-center">
-                    <p className="text-lg text-muted-foreground">
-                      No products yet. Add your first product to get started!
-                    </p>
-                  </div>
-                )}
-              </Card>
+
+                  <Card>
+                    {isLoading ? (
+                      <div className="p-6 space-y-4">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Skeleton key={i} className="h-16 w-full" />
+                        ))}
+                      </div>
+                    ) : products && products.length > 0 ? (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Image</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Price</TableHead>
+                            <TableHead>Stock</TableHead>
+                            <TableHead>Active</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {products.map((product) => (
+                            <TableRow key={product.id} data-testid={`row-product-${product.id}`}>
+                              <TableCell>
+                                {product.imageUrl ? (
+                                  <img
+                                    src={product.imageUrl}
+                                    alt={product.name}
+                                    className="h-12 w-12 object-cover rounded-md"
+                                  />
+                                ) : (
+                                  <div className="h-12 w-12 bg-muted rounded-md flex items-center justify-center text-xs text-muted-foreground">
+                                    No image
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell className="font-medium">
+                                {product.name}
+                              </TableCell>
+                              <TableCell>${parseFloat(product.price).toFixed(2)}</TableCell>
+                              <TableCell>{product.stock}</TableCell>
+                              <TableCell>
+                                <Switch
+                                  checked={product.isActive}
+                                  onCheckedChange={() => handleToggleActive(product)}
+                                  data-testid={`switch-active-${product.id}`}
+                                />
+                              </TableCell>
+                              <TableCell className="text-right space-x-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleEdit(product)}
+                                  data-testid={`button-edit-${product.id}`}
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="text-destructive hover:text-destructive"
+                                  onClick={() => setDeletingProductId(product.id)}
+                                  data-testid={`button-delete-${product.id}`}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    ) : (
+                      <div className="p-12 text-center">
+                        <p className="text-lg text-muted-foreground">
+                          No products yet. Add your first product to get started!
+                        </p>
+                      </div>
+                    )}
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="themes">
+                  <ThemeManager />
+                </TabsContent>
+              </Tabs>
             </div>
           </main>
         </div>

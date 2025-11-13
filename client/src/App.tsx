@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -5,6 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/lib/cartContext";
 import { AuthProvider } from "@/lib/authContext";
+import { ThemeDecorations } from "@/components/ThemeDecorations";
+import type { ThemeType } from "@/components/ThemeManager";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -27,6 +30,31 @@ function Router() {
   );
 }
 
+function AppContent() {
+  const [theme, setTheme] = useState<ThemeType>("default");
+  const [decorationsEnabled, setDecorationsEnabled] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("website-theme") as ThemeType | null;
+    const savedDecorations = localStorage.getItem("website-decorations");
+
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+
+    if (savedDecorations) {
+      setDecorationsEnabled(JSON.parse(savedDecorations));
+    }
+  }, []);
+
+  return (
+    <>
+      <Router />
+      <ThemeDecorations theme={theme} enabled={decorationsEnabled} />
+    </>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -34,7 +62,7 @@ function App() {
         <CartProvider>
           <TooltipProvider>
             <Toaster />
-            <Router />
+            <AppContent />
           </TooltipProvider>
         </CartProvider>
       </AuthProvider>
