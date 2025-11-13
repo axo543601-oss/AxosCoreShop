@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/lib/cartContext";
 import type { Product } from "@shared/schema";
 import heroImage from "@assets/hero-purple-axolotl-mascot_1762939234262.png";
-import { Github, Instagram, Twitter, Mail } from "lucide-react";
+import { Github, Instagram, Twitter, Mail, Youtube } from "lucide-react";
 
 export default function Home() {
   const { toast } = useToast();
@@ -215,7 +215,7 @@ export default function Home() {
             {/* Social Links */}
             <div>
               <h3 className="text-lg font-semibold text-foreground mb-4">Follow Us</h3>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-4">
                 <a
                   href="https://twitter.com/axoshard"
                   target="_blank"
@@ -235,13 +235,35 @@ export default function Home() {
                   <Instagram className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://github.com/axolotlshard"
+                  href="https://www.tiktok.com/@axoshard?_t=ZN-8ziqIb0T0wI&_r=1"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-purple-600 transition"
-                  aria-label="GitHub"
+                  aria-label="TikTok"
                 >
-                  <Github className="w-5 h-5" />
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.1 1.75 2.9 2.9 0 0 1 2.31-4.64 2.88 2.88 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-.01-.01z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.youtube.com/@axo_shard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-purple-600 transition"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://discord.gg/U3cgX7HDFd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-purple-600 transition"
+                  aria-label="Discord"
+                >
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M20.317 4.3671a19.8063 19.8063 0 0 0-4.885-1.515.0741.0741 0 0 0-.0785.0371c-.211.3671-.4437.8484-.6079 1.2278a18.268 18.268 0 0 0-5.487 0c-.1645-.3799-.4022-.8607-.6079-1.2278a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.885 1.515.0699.0699 0 0 0-.0321.0277C1.75 8.068 1.1968 11.692 2.705 15.0832a.0764.0764 0 0 0 .0945.0052c1.1164.8784 2.1909 1.2171 3.2383 1.6779a.0777.0777 0 0 0 .1692-.0277c.2424-.3933.4775-.8108.6655-1.2475a.0711.0711 0 0 0-.0383-.0922c-.784-.2956-1.528-.6679-2.2225-1.0742a.077.077 0 0 1-.0076-.1277c.1494.111.2983.2324.4406.3645a.0755.0755 0 0 0 .1174-.0274c4.568 2.285 9.534 2.285 14.051 0a.0755.0755 0 0 0 .1196.0274c.1423-.1319.2912-.2526.4406-.3645a.077.077 0 0 1-.0066.1288c-.6954.4057-1.4382.7742-2.2225 1.0742a.077.077 0 0 0-.0383.0922c.1884.4367.4226.8542.6655 1.2475a.076.076 0 0 0 .1692.0277c1.0464-.4608 2.1215-.7998 3.2383-1.6779a.0755.0755 0 0 0 .0945-.0052c1.5127-3.4407.992-6.9956-1.617-9.8159a.0528.0528 0 0 0-.0321-.0277zM8.02 12.6979c-1.1164 0-2.0425-.9852-2.0425-2.1961s.9181-2.1961 2.0425-2.1961c1.1244 0 2.062.9852 2.0425 2.1961 0 1.2108-.9181 2.1961-2.0425 2.1961zm7.9596 0c-1.1164 0-2.0425-.9852-2.0425-2.1961s.9181-2.1961 2.0425-2.1961c1.1244 0 2.062.9852 2.0425 2.1961 0 1.2108-.9181 2.1961-2.0425 2.1961z" />
+                  </svg>
                 </a>
                 <a
                   href="mailto:contact@axoshard.com"
