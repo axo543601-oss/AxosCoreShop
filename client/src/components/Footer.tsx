@@ -29,22 +29,22 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link href="/shop">
-                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">Shop</button>
+                  <a className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">Shop</a>
                 </Link>
               </li>
               <li>
                 <Link href="/about">
-                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</button>
+                  <a className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">About</a>
                 </Link>
               </li>
               <li>
                 <Link href="/contact">
-                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</button>
+                  <a className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">Contact</a>
                 </Link>
               </li>
               <li>
                 <Link href="/privacy-policy">
-                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</button>
+                  <a className="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">Privacy Policy</a>
                 </Link>
               </li>
             </ul>
