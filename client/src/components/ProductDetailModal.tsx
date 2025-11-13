@@ -24,8 +24,18 @@ interface ProductDetailModalProps {
 }
 
 const DEFAULT_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
-const NO_SIZE_PRODUCTS = ["Phone Case", "Stickers", "Cup"];
+const NO_SIZE_PRODUCTS = ["Phone Case", "Stickers", "Cup", "Mug"];
 const PLUSHIE_SIZES = ["L", "XL"];
+
+// Size multipliers for price adjustments
+const SIZE_PRICE_MULTIPLIERS: Record<string, number> = {
+  "XS": 0.9,
+  "S": 0.95,
+  "M": 1.0,    // Base price
+  "L": 1.1,
+  "XL": 1.2,
+  "XXL": 1.3,
+};
 
 const getSizesForProduct = (productName: string): string[] => {
   if (NO_SIZE_PRODUCTS.some(name => productName.includes(name))) {
@@ -35,6 +45,11 @@ const getSizesForProduct = (productName: string): string[] => {
     return PLUSHIE_SIZES;
   }
   return DEFAULT_SIZES;
+};
+
+const calculateSizePrice = (basePrice: number, size: string): number => {
+  const multiplier = SIZE_PRICE_MULTIPLIERS[size] || 1.0;
+  return basePrice * multiplier;
 };
 
 export function ProductDetailModal({
@@ -99,7 +114,7 @@ export function ProductDetailModal({
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Price</p>
                 <p className="text-4xl font-bold text-foreground">
-                  ${parseFloat(product.price).toFixed(2)}
+                  ${calculateSizePrice(parseFloat(product.price), selectedSize).toFixed(2)}
                 </p>
               </div>
 
