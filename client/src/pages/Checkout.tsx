@@ -179,6 +179,7 @@ export default function Checkout() {
     }));
 
     apiRequest("POST", "/api/create-payment-intent", { items })
+      .then((response) => response.json())
       .then((data) => {
         setClientSecret(data.clientSecret);
         if (Math.abs(data.amount - cartTotal) > 0.01) {
