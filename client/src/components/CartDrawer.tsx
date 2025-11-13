@@ -62,11 +62,17 @@ export function CartDrawer({
                   data-testid={`cart-item-${item.product.id}`}
                 >
                   <div className="h-20 w-20 rounded-md overflow-hidden bg-muted flex-shrink-0">
-                    <img
-                      src={item.product.imageUrl}
-                      alt={item.product.name}
-                      className="w-full h-full object-cover"
-                    />
+                    {item.product.imageUrl ? (
+                      <img
+                        src={item.product.imageUrl}
+                        alt={item.product.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
+                        No image
+                      </div>
+                    )}
                   </div>
                   <div className="flex-1 space-y-2">
                     <div className="flex items-start justify-between gap-2">

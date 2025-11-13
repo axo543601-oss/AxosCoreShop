@@ -87,67 +87,61 @@ function CheckoutForm({ customerName, customerEmail, onNameChange, onEmailChange
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="name">Full Name</Label>
-          <Input
-            id="name"
-            type="text"
-            value={customerName}
-            onChange={(e) => onNameChange(e.target.value)}
-            placeholder="John Doe"
-            required
-            data-testid="input-customer-name"
-          />
-        </div>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={customerEmail}
-            onChange={(e) => onEmailChange(e.target.value)}
-            placeholder="john@example.com"
-            required
-            data-testid="input-customer-email"
-          />
+    <form onSubmit={handleSubmit} className="space-y-8">
+      <div>
+        <h3 className="text-lg font-semibold mb-4 text-foreground">Contact Information</h3>
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="name" className="text-base">Full Name</Label>
+            <Input
+              id="name"
+              type="text"
+              value={customerName}
+              onChange={(e) => onNameChange(e.target.value)}
+              placeholder="John Doe"
+              required
+              data-testid="input-customer-name"
+              className="mt-2"
+            />
+          </div>
+          <div>
+            <Label htmlFor="email" className="text-base">Email Address</Label>
+            <Input
+              id="email"
+              type="email"
+              value={customerEmail}
+              onChange={(e) => onEmailChange(e.target.value)}
+              placeholder="john@example.com"
+              required
+              data-testid="input-customer-email"
+              className="mt-2"
+            />
+          </div>
         </div>
       </div>
 
       <Separator />
 
-      <div className="bg-muted p-4 rounded-md space-y-2">
-        <h3 className="font-semibold text-sm text-muted-foreground">Order Summary</h3>
-        {cart.map((item) => (
-          <div key={item.product.id} className="flex justify-between text-sm">
-            <span>
-              {item.product.name} × {item.quantity}
-            </span>
-            <span>${(parseFloat(item.product.price) * item.quantity).toFixed(2)}</span>
-          </div>
-        ))}
-        <Separator />
-        <div className="flex justify-between font-semibold">
-          <span>Total</span>
-          <span data-testid="text-checkout-total">${cartTotal.toFixed(2)}</span>
-        </div>
-      </div>
-
       <div>
-        <Label className="text-base font-semibold mb-4 block">Payment Details</Label>
-        <PaymentElement />
+        <h3 className="text-lg font-semibold mb-4 text-foreground">Payment Details</h3>
+        <div className="bg-muted/50 p-4 rounded-lg">
+          <PaymentElement />
+        </div>
       </div>
 
       <Button
         type="submit"
         size="lg"
-        className="w-full"
+        className="w-full text-base py-6"
         disabled={!stripe || isProcessing}
         data-testid="button-pay"
       >
         {isProcessing ? "Processing..." : `Pay $${cartTotal.toFixed(2)}`}
       </Button>
+
+      <p className="text-xs text-muted-foreground text-center">
+        Your payment is secure and encrypted. We never store your card details.
+      </p>
     </form>
   );
 }
@@ -220,24 +214,65 @@ export default function Checkout() {
     <div className="min-h-screen bg-background">
       <Header cartItemCount={cartItemCount} onCartClick={() => {}} />
 
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Checkout</h1>
+          <h1 className="text-4xl font-bold text-foreground">Checkout</h1>
           <p className="text-muted-foreground mt-2">
-            Complete your purchase securely
+            Complete your purchase securely with Stripe
           </p>
         </div>
 
-        <Card className="p-6">
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <CheckoutForm
-              customerName={customerName}
-              customerEmail={customerEmail}
-              onNameChange={setCustomerName}
-              onEmailChange={setCustomerEmail}
-            />
-          </Elements>
-        </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Checkout Form */}
+          <div className="lg:col-span-2">
+            <Card className="p-6 lg:p-8">
+              <Elements stripe={stripePromise} options={{ clientSecret }}>
+                <CheckoutForm
+                  customerName={customerName}
+                  customerEmail={customerEmail}
+                  onNameChange={setCustomerName}
+                  onEmailChange={setCustomerEmail}
+                />
+              </Elements>
+            </Card>
+          </div>
+
+          {/* Order Summary Sidebar */}
+          <div>
+            <Card className="p-6 sticky top-20">
+              <h2 className="font-bold text-lg mb-4">Order Summary</h2>
+              <div className="space-y-3 mb-4">
+                {cart.map((item) => (
+                  <div key={item.product.id} className="flex justify-between text-sm">
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">{item.product.name}</p>
+                      <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
+                    </div>
+                    <p className="font-medium text-foreground">
+                      ${(parseFloat(item.product.price) * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <Separator className="my-4" />
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Subtotal</span>
+                  <span>${cartTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+                <Separator className="my-2" />
+                <div className="flex justify-between font-bold text-lg">
+                  <span>Total</span>
+                  <span className="text-primary">${cartTotal.toFixed(2)}</span>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
