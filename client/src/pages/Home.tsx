@@ -5,10 +5,12 @@ import { ProductCard } from "@/components/ProductCard";
 import { ProductDetailModal } from "@/components/ProductDetailModal";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/lib/cartContext";
 import type { Product } from "@shared/schema";
 import heroImage from "@assets/hero-purple-axolotl-mascot_1762939234262.png";
+import { Github, Instagram, Twitter, Mail } from "lucide-react";
 
 export default function Home() {
   const { toast } = useToast();
@@ -16,12 +18,18 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
 
   const activeProducts = products?.filter((p) => p.isActive) || [];
+  
+  const filteredProducts = activeProducts.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    product.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleAddToCart = (product: Product) => {
     const existing = cart.find((item) => item.product.id === product.id);
@@ -134,6 +142,22 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Search Bar */}
+        <div className="mb-8">
+          <Input
+            type="text"
+            placeholder="Search products by name or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full max-w-md"
+          />
+          {searchQuery && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Found {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""}
+            </p>
+          )}
+        </div>
+
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -144,15 +168,17 @@ export default function Home() {
               </div>
             ))}
           </div>
-        ) : activeProducts.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-lg text-muted-foreground">
-              No products available at the moment. Check back soon!
+              {searchQuery
+                ? "No products match your search. Try different keywords."
+                : "No products available at the moment. Check back soon!"}
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {activeProducts.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -164,14 +190,78 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="bg-background border-t border-border mt-16 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-muted-foreground">
-            © All rights reserved 2025 AxoShard
-          </p>
-          <p className="text-muted-foreground mt-1">
-            Made for all axolotl lovers
-          </p>
+      <footer className="bg-background border-t border-border mt-16 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* Brand Info */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">AxoShard</h3>
+              <p className="text-muted-foreground text-sm">
+                Official axolotl merch with Minecraft-inspired pixelated texture. Made for all axolotl lovers.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Quick Links</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground transition">Shop</a></li>
+                <li><a href="#" className="hover:text-foreground transition">About</a></li>
+                <li><a href="#" className="hover:text-foreground transition">Contact</a></li>
+                <li><a href="#" className="hover:text-foreground transition">Privacy Policy</a></li>
+              </ul>
+            </div>
+
+            {/* Social Links */}
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Follow Us</h3>
+              <div className="flex gap-4">
+                <a
+                  href="https://twitter.com/axoshard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-purple-600 transition"
+                  aria-label="Twitter"
+                >
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://instagram.com/axoshard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-purple-600 transition"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://github.com/axolotlshard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-purple-600 transition"
+                  aria-label="GitHub"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+                <a
+                  href="mailto:contact@axoshard.com"
+                  className="text-muted-foreground hover:text-purple-600 transition"
+                  aria-label="Email"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-border pt-8 text-center">
+            <p className="text-muted-foreground">
+              © All rights reserved 2025 AxoShard
+            </p>
+            <p className="text-muted-foreground mt-1">
+              Made for all axolotl lovers
+            </p>
+          </div>
         </div>
       </footer>
     </div>
