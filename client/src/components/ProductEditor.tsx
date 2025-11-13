@@ -178,8 +178,7 @@ export function ProductEditor({
                   <FormControl>
                     <Input
                       {...field}
-                      type="url"
-                      placeholder="https://example.com/image.png"
+                      placeholder="https://example.com/image.png or leave blank"
                       data-testid="input-product-image-url"
                     />
                   </FormControl>
