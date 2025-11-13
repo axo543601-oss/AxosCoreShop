@@ -3,7 +3,7 @@
     "550e8400-e29b-41d4-a716-446655440000": {
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "email": "admin@axoshard.com",
-      "password": "$2b$10$JH2MfcmCpawSKqLPEMr9JOy0kqATN1W6ZY.PeST5v./d4ag0ktLfO",
+      "password": "$2b$10$L3Y/GWuCRFyiOSqSbtJueOGKqrT0ut8p5bAzvNSn/H4afvY8xbZCG",
       "name": "AxoShard Admin",
       "isAdmin": true,
       "createdAt": "2025-11-12T22:00:00.000Z"
