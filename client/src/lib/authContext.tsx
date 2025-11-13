@@ -26,13 +26,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const userData = await apiRequest("POST", "/api/auth/login", { email, password });
+    const response = await apiRequest("POST", "/api/auth/login", { email, password });
+    const userData = await response.json();
     setUser(userData);
     localStorage.setItem("axo-user", JSON.stringify(userData));
   };
 
   const signup = async (email: string, password: string, name: string) => {
-    const userData = await apiRequest("POST", "/api/auth/signup", { email, password, name });
+    const response = await apiRequest("POST", "/api/auth/signup", { email, password, name });
+    const userData = await response.json();
     setUser(userData);
     localStorage.setItem("axo-user", JSON.stringify(userData));
   };
