@@ -56,25 +56,42 @@ function CheckoutForm({ customerName, customerEmail, onNameChange, onEmailChange
           variant: "destructive",
         });
         setIsProcessing(false);
-      } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        await apiRequest("POST", "/api/orders", {
-          order: {
-            customerEmail,
-            customerName,
-            totalAmount: cartTotal.toFixed(2),
-            status: "completed",
-            stripePaymentIntentId: paymentIntent.id,
-          },
-          items: cart.map((item) => ({
-            productId: item.product.id,
-            productName: item.product.name,
-            quantity: item.quantity,
-            price: item.product.price,
-          })),
-        });
+      } else if (paymentIntent && (paymentIntent.status === "succeeded" || paymentIntent.status === "processing")) {
+        try {
+          const response = await apiRequest("POST", "/api/orders", {
+            order: {
+              customerEmail,
+              customerName,
+              totalAmount: cartTotal.toFixed(2),
+              status: "completed",
+              stripePaymentIntentId: paymentIntent.id,
+            },
+            items: cart.map((item) => ({
+              productId: item.product.id,
+              productName: item.product.name,
+              quantity: item.quantity,
+              price: item.product.price,
+            })),
+          });
 
-        clearCart();
-        window.location.href = `/order-confirmation?payment_intent=${paymentIntent.id}`;
+          await response.json();
+          clearCart();
+          window.location.href = `/order-confirmation?payment_intent=${paymentIntent.id}`;
+        } catch (orderError) {
+          toast({
+            title: "Order Error",
+            description: "Payment succeeded but order saving failed. Please contact support.",
+            variant: "destructive",
+          });
+          setIsProcessing(false);
+        }
+      } else {
+        toast({
+          title: "Payment Incomplete",
+          description: "Payment was not completed. Please try again.",
+          variant: "destructive",
+        });
+        setIsProcessing(false);
       }
     } catch (err) {
       toast({
