@@ -46,7 +46,7 @@ export function Header({ cartItemCount, onCartClick }: HeaderProps) {
                         className="bg-purple-600 hover:bg-purple-700"
                         data-testid="link-admin"
                       >
-                        Add Merch
+                        Manage Store
                       </Button>
                     </Link>
                   </>
