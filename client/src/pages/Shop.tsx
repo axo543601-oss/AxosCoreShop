@@ -3,23 +3,53 @@ import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductDetailModal } from "@/components/ProductDetailModal";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, SlidersHorizontal } from "lucide-react";
+import { useCart } from "@/lib/cartContext";
+import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@shared/schema";
 
 export default function Shop() {
+  const { toast } = useToast();
+  const { cart, addToCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "price-asc" | "price-desc">("name");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
+
+  const handleAddToCart = (product: Product) => {
+    const existing = cart.find((item) => item.product.id === product.id);
+    if (existing && existing.quantity >= product.stock) {
+      toast({
+        title: "Cannot add more",
+        description: "Maximum stock reached for this item",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    addToCart({ product, quantity: 1 });
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart`,
+    });
+  };
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsDetailModalOpen(true);
+  };
 
   const filteredProducts = products?.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -133,7 +163,12 @@ export default function Shop() {
         ) : filteredProducts && filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+                onProductClick={handleProductClick}
+              />
             ))}
           </div>
         ) : (
@@ -158,6 +193,16 @@ export default function Shop() {
           </div>
         )}
       </main>
+
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedProduct(null);
+        }}
+        onAddToCart={handleAddToCart}
+      />
 
       <Footer />
     </div>
