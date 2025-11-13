@@ -137,7 +137,8 @@ export function ProductDetailModal({
               <Button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white h-12 text-lg"
+                variant="default"
+                className="w-full text-white h-12 text-lg"
               >
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 Add to Cart

@@ -113,7 +113,7 @@ export default function PrivacyPolicyPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+              <Button type="submit" variant="default" className="w-full">
                 Send Message
               </Button>
             </form>

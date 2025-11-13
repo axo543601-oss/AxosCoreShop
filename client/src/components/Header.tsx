@@ -43,7 +43,6 @@ export function Header({ cartItemCount = 0, onCartClick }: HeaderProps) {
                       <Button 
                         variant="default" 
                         size="sm" 
-                        className="bg-purple-600 hover:bg-purple-700"
                         data-testid="link-admin"
                       >
                         Manage Store

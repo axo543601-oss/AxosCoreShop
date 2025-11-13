@@ -58,14 +58,11 @@ export function ProductCard({ product, onAddToCart, onProductClick }: ProductCar
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onAddToCart(product);
-          }}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-          disabled={isOutOfStock}
-          data-testid={`button-add-to-cart-${product.id}`}
+                <Button
+          onClick={onAddToCart}
+          disabled={product.stock === 0}
+          variant="default"
+          className="w-full text-white"
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
           Add to Cart

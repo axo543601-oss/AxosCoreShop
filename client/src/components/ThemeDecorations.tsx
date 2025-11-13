@@ -18,45 +18,74 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
     const newDecorations: JSX.Element[] = [];
 
     if (theme === "christmas") {
-      // Create snowflakes
-      for (let i = 0; i < 20; i++) {
+      // Create snowflakes in fixed grid positions
+      const positions = [
+        { left: 5, delay: 0, duration: 15 },
+        { left: 15, delay: 2, duration: 18 },
+        { left: 25, delay: 4, duration: 16 },
+        { left: 35, delay: 1, duration: 17 },
+        { left: 45, delay: 3, duration: 19 },
+        { left: 55, delay: 2, duration: 15 },
+        { left: 65, delay: 4, duration: 18 },
+        { left: 75, delay: 1, duration: 16 },
+        { left: 85, delay: 3, duration: 17 },
+        { left: 95, delay: 2, duration: 19 },
+        { left: 10, delay: 5, duration: 16 },
+        { left: 30, delay: 6, duration: 18 },
+        { left: 50, delay: 5, duration: 17 },
+        { left: 70, delay: 6, duration: 19 },
+        { left: 90, delay: 5, duration: 15 },
+        { left: 20, delay: 7, duration: 16 },
+        { left: 40, delay: 7, duration: 17 },
+        { left: 60, delay: 7, duration: 18 },
+        { left: 80, delay: 7, duration: 19 },
+      ];
+
+      positions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`snowflake-${i}`}
             className="snowflake"
             style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${10 + Math.random() * 20}s`,
+              left: `${pos.left}%`,
+              animationDelay: `${pos.delay}s`,
+              animationDuration: `${pos.duration}s`,
             }}
           >
             ❄️
           </div>
         );
-      }
-
-      // Add garland decoration to header
-      const header = document.querySelector("header");
-      if (header) {
-        const garland = document.createElement("div");
-        garland.className = "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-green-500 to-red-500 opacity-60";
-        header.style.position = "relative";
-        header.appendChild(garland);
-        return () => garland.remove();
-      }
+      });
     }
 
     if (theme === "halloween") {
-      // Create pumpkins
-      for (let i = 0; i < 15; i++) {
+      // Fixed pumpkin positions
+      const pumpkinPositions = [
+        { left: 10, top: 20 },
+        { left: 25, top: 15 },
+        { left: 40, top: 25 },
+        { left: 55, top: 18 },
+        { left: 70, top: 22 },
+        { left: 85, top: 20 },
+        { left: 15, top: 50 },
+        { left: 35, top: 55 },
+        { left: 60, top: 52 },
+        { left: 80, top: 58 },
+        { left: 20, top: 80 },
+        { left: 45, top: 85 },
+        { left: 70, top: 82 },
+        { left: 5, top: 40 },
+        { left: 92, top: 45 },
+      ];
+
+      pumpkinPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`pumpkin-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "2em",
               opacity: 0.3,
               pointerEvents: "none",
@@ -66,18 +95,31 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             🎃
           </div>
         );
-      }
+      });
 
-      // Add spiders
-      for (let i = 0; i < 10; i++) {
+      // Fixed spider positions
+      const spiderPositions = [
+        { right: 15, top: 10 },
+        { right: 8, top: 25 },
+        { right: 20, top: 40 },
+        { right: 5, top: 55 },
+        { right: 18, top: 70 },
+        { right: 12, top: 35 },
+        { right: 3, top: 15 },
+        { right: 25, top: 50 },
+        { right: 10, top: 80 },
+        { right: 22, top: 60 },
+      ];
+
+      spiderPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`spider-${i}`}
             className="decoration-spin"
             style={{
               position: "fixed",
-              right: `${Math.random() * 20}%`,
-              top: `${Math.random() * 50}%`,
+              right: `${pos.right}%`,
+              top: `${pos.top}%`,
               fontSize: "1.5em",
               opacity: 0.25,
               pointerEvents: "none",
@@ -87,20 +129,34 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             🕷️
           </div>
         );
-      }
+      });
     }
 
     if (theme === "easter") {
-      // Create eggs and bunnies
-      for (let i = 0; i < 12; i++) {
+      // Fixed egg positions
+      const eggPositions = [
+        { left: 8, top: 15 },
+        { left: 22, top: 20 },
+        { left: 38, top: 18 },
+        { left: 55, top: 22 },
+        { left: 70, top: 16 },
+        { left: 85, top: 19 },
+        { left: 15, top: 50 },
+        { left: 45, top: 55 },
+        { left: 75, top: 52 },
+        { left: 30, top: 80 },
+        { left: 60, top: 85 },
+        { left: 12, top: 65 },
+      ];
+
+      eggPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`egg-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "1.8em",
               opacity: 0.2,
               pointerEvents: "none",
@@ -110,40 +166,56 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             🥚
           </div>
         );
-      }
+      });
 
-      // Add bunnies
-      for (let i = 0; i < 5; i++) {
+      // Fixed bunny positions
+      const bunnyPositions = [
+        { left: 5, top: 30 },
+        { left: 40, top: 40 },
+        { left: 80, top: 35 },
+        { left: 25, top: 70 },
+        { left: 70, top: 65 },
+      ];
+
+      bunnyPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`bunny-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "2em",
               opacity: 0.25,
               pointerEvents: "none",
               zIndex: 5,
-              animationDelay: `${Math.random() * 5}s`,
             }}
           >
             🐰
           </div>
         );
-      }
+      });
 
-      // Add flowers
-      for (let i = 0; i < 8; i++) {
+      // Fixed flower positions
+      const flowerPositions = [
+        { left: 12, top: 25 },
+        { left: 32, top: 60 },
+        { left: 52, top: 30 },
+        { left: 72, top: 75 },
+        { left: 20, top: 85 },
+        { left: 50, top: 70 },
+        { left: 80, top: 50 },
+        { left: 90, top: 20 },
+      ];
+
+      flowerPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`flower-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "1.6em",
               opacity: 0.2,
               pointerEvents: "none",
@@ -153,42 +225,75 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             🌸
           </div>
         );
-      }
+      });
     }
 
     if (theme === "valentine") {
-      // Create hearts and roses
-      for (let i = 0; i < 20; i++) {
+      // Fixed heart positions
+      const heartPositions = [
+        { left: 10, top: 15 },
+        { left: 25, top: 25 },
+        { left: 40, top: 20 },
+        { left: 55, top: 30 },
+        { left: 70, top: 18 },
+        { left: 85, top: 28 },
+        { left: 15, top: 50 },
+        { left: 35, top: 55 },
+        { left: 60, top: 52 },
+        { left: 80, top: 60 },
+        { left: 20, top: 75 },
+        { left: 45, top: 80 },
+        { left: 70, top: 78 },
+        { left: 8, top: 60 },
+        { left: 90, top: 40 },
+        { left: 22, top: 42 },
+        { left: 50, top: 68 },
+        { left: 75, top: 35 },
+        { left: 12, top: 85 },
+        { left: 65, top: 25 },
+      ];
+
+      heartPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`heart-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "1.8em",
               opacity: 0.25,
               pointerEvents: "none",
               zIndex: 5,
-              animationDelay: `${Math.random() * 5}s`,
             }}
           >
             ❤️
           </div>
         );
-      }
+      });
 
-      // Add roses
-      for (let i = 0; i < 10; i++) {
+      // Fixed rose positions
+      const rosePositions = [
+        { left: 5, top: 35 },
+        { left: 30, top: 45 },
+        { left: 55, top: 40 },
+        { left: 80, top: 48 },
+        { left: 18, top: 70 },
+        { left: 42, top: 65 },
+        { left: 68, top: 72 },
+        { left: 88, top: 55 },
+        { left: 28, top: 15 },
+        { left: 62, top: 10 },
+      ];
+
+      rosePositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`rose-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "2em",
               opacity: 0.2,
               pointerEvents: "none",
@@ -198,20 +303,35 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             🌹
           </div>
         );
-      }
+      });
     }
 
     if (theme === "summer") {
-      // Create suns, ice creams, and beach balls
-      for (let i = 0; i < 12; i++) {
+      // Fixed sun positions
+      const sunPositions = [
+        { left: 10, top: 10 },
+        { left: 30, top: 15 },
+        { left: 50, top: 8 },
+        { left: 70, top: 12 },
+        { left: 88, top: 18 },
+        { left: 20, top: 40 },
+        { left: 60, top: 35 },
+        { left: 15, top: 55 },
+        { left: 75, top: 48 },
+        { left: 40, top: 52 },
+        { left: 25, top: 25 },
+        { left: 80, top: 28 },
+      ];
+
+      sunPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`sun-${i}`}
-            className="decoration-float decoration-spin"
+            className="decoration-spin"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 60}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "2.5em",
               opacity: 0.2,
               pointerEvents: "none",
@@ -221,18 +341,28 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             ☀️
           </div>
         );
-      }
+      });
 
-      // Add ice creams
-      for (let i = 0; i < 8; i++) {
+      // Fixed ice cream positions
+      const icecreamPositions = [
+        { left: 12, bottom: 15 },
+        { left: 28, bottom: 20 },
+        { left: 45, bottom: 12 },
+        { left: 62, bottom: 18 },
+        { left: 80, bottom: 22 },
+        { left: 20, bottom: 5 },
+        { left: 55, bottom: 8 },
+        { left: 85, bottom: 10 },
+      ];
+
+      icecreamPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`icecream-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              bottom: `${Math.random() * 30}%`,
+              left: `${pos.left}%`,
+              bottom: `${pos.bottom}%`,
               fontSize: "2em",
               opacity: 0.25,
               pointerEvents: "none",
@@ -242,18 +372,26 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             🍦
           </div>
         );
-      }
+      });
 
-      // Add watermelons
-      for (let i = 0; i < 6; i++) {
+      // Fixed watermelon positions
+      const watermelonPositions = [
+        { left: 15, top: 35 },
+        { left: 35, top: 42 },
+        { left: 55, top: 38 },
+        { left: 75, top: 45 },
+        { left: 25, top: 65 },
+        { left: 65, top: 60 },
+      ];
+
+      watermelonPositions.forEach((pos, i) => {
         newDecorations.push(
           <div
             key={`watermelon-${i}`}
-            className="decoration-float"
             style={{
               position: "fixed",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${pos.left}%`,
+              top: `${pos.top}%`,
               fontSize: "1.8em",
               opacity: 0.2,
               pointerEvents: "none",
@@ -263,7 +401,7 @@ export function ThemeDecorations({ theme, enabled }: ThemeDecorationsProps) {
             🍉
           </div>
         );
-      }
+      });
     }
 
     setDecorations(newDecorations);
